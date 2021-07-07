@@ -9,9 +9,11 @@ enum YelpError: Error {
 class YelpService : CoreService {
     
     let yelpBaseURL = "https://api.yelp.com/v3/businesses/search"
-    let locationService = LocationService()
+    let locationService: LocationService!
     
-    override init() {}
+    init(locationService: LocationService) {
+        self.locationService = locationService
+    }
     
     func getRestaurantsForUsersLocation(callback: @escaping (Restaurants?, Error?) -> ()){
         locationService.getUsersLocation()

@@ -4,7 +4,11 @@ import MapKit
 public class RestaurantViewModel {
     let restaurants: Box<Restaurants?> = Box(nil)
     let annotations: Box<[MKAnnotation]> = Box([])
-    let yelpService = YelpService()
+    var yelpService: YelpService!
+    
+    init(yelpService: YelpService) {
+        self.yelpService = yelpService
+    }
     
     func getRestaurantsForUsersLocation(){
         yelpService.getRestaurantsForUsersLocation {[weak self] (restaurants, error) in
@@ -21,6 +25,7 @@ public class RestaurantViewModel {
         var annotations: [MKAnnotation] = []
         
         for restaurant in  restaurants!.businesses {
+            if restaurant.latitude == nil {continue}
             let annotation = MKPointAnnotation()
             annotation.title = restaurant.name
             annotation.coordinate = CLLocationCoordinate2D(latitude: restaurant.latitude!, longitude: restaurant.longitude!)

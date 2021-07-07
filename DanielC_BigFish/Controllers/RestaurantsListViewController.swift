@@ -10,6 +10,8 @@ import UIKit
 class RestaurantsListViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     @IBOutlet weak var searchResultsLabel: UILabel!
+    @IBOutlet weak var searchResultsNumberLabel: UILabel!
+    @IBOutlet weak var searchResultsBGView: UIView!
     
     var restaurants: Restaurants? = nil
     
@@ -20,14 +22,19 @@ class RestaurantsListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        configUI()
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UINib(nibName: "DefaultTableViewCell", bundle: nil), forCellReuseIdentifier: "DefaultTableViewCell")
+        tableView.register(UINib(nibName: "RestaurantTableViewCell", bundle: nil), forCellReuseIdentifier: "restaurantCell")
                 
         let gesture = UIPanGestureRecognizer.init(target: self, action: #selector(RestaurantsListViewController.panGesture))
         gesture.delegate = self
         view.addGestureRecognizer(gesture)
+    }
+    
+    private func configUI(){
+        self.searchResultsBGView.layer.cornerRadius = self.searchResultsBGView.frame.size.height/2
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,8 +53,10 @@ class RestaurantsListViewController: UIViewController {
     func updateRestaurants(restaurants: Restaurants){
         DispatchQueue.main.async {
             self.restaurants = restaurants
-            self.searchResultsLabel.text = "Search Results \(restaurants.businesses.count)"
+            self.searchResultsNumberLabel.text = "\(restaurants.businesses.count)"
             self.searchResultsLabel.isHidden = false
+            self.searchResultsNumberLabel.isHidden = false
+            self.searchResultsBGView.isHidden = false
             self.tableView.reloadData()
         }
     }
@@ -100,7 +109,7 @@ extension RestaurantsListViewController: UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "DefaultTableViewCell") as? DefaultTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "restaurantCell") as? RestaurantTableViewCell
         let restaurant: Restaurant = (self.restaurants?.businesses[indexPath.row])!
         cell?.restaurantName.text = restaurant.name
         return cell!

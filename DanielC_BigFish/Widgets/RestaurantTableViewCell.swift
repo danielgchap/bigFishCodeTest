@@ -8,13 +8,18 @@
 
 import UIKit
 
-class DefaultTableViewCell: UITableViewCell {
-    @IBOutlet weak var restaurantAddress: UILabel!
+class RestaurantTableViewCell: UITableViewCell {
+    
     @IBOutlet weak var restaurantName: UILabel!
+    @IBOutlet weak var callButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        configUI()
+    }
+    
+    private func configUI(){
+        self.callButton.layer.cornerRadius = 5
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

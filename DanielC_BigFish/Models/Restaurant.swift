@@ -3,9 +3,13 @@ import MapKit
 
 struct Restaurants : Decodable {
     var businesses: [Restaurant]
+    
+    init() {
+        businesses = []
+    }
 }
 
-struct Restaurant : Decodable {
+struct Restaurant {
     var displayPhone: String?
     var imageURL: String?
     var latitude: Double?
@@ -25,7 +29,9 @@ struct Restaurant : Decodable {
     enum CoordinatesKey: Int, CodingKey {
         case latitude, longitude
     }
-    
+}
+
+extension Restaurant : Decodable {
     init(from decoder: Decoder) throws {
         let outerContainer = try decoder.container(keyedBy: CodingKeys.self)
         displayPhone = try outerContainer.decode(String.self, forKey: .displayPhone)

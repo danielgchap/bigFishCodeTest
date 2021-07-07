@@ -11,7 +11,7 @@ import MapKit
 class ViewController: UIViewController {
     @IBOutlet var mapView: MKMapView!
     
-    let viewModel = RestaurantViewModel()
+    let viewModel = RestaurantViewModel(yelpService: YelpService(locationService: LocationService()))
     let restaurantList = RestaurantsListViewController()
     var restaurants: Restaurants? = nil
     
@@ -52,6 +52,7 @@ class ViewController: UIViewController {
     }
     
     func addBottomSheetView(scrollable: Bool? = true) {
+        restaurantList.view.frame = self.view.frame
         self.addChild(restaurantList)
         self.view.addSubview(restaurantList.view)
         restaurantList.didMove(toParent: self)
